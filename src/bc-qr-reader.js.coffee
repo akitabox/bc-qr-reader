@@ -23,7 +23,8 @@ bcQrReader = ($timeout) ->
           video.pause();
           video.src = "";
         if scope.cameraStream
-          scope.cameraStream.getTracks()[0].stop();
+          for track in scope.cameraStream.getTracks()
+            track.stop();
         return;
 
       scope.$on('$destroy', turnOff);

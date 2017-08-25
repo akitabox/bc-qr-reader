@@ -3977,14 +3977,18 @@ bcQrReader = function($timeout) {
         };
       }
       turnOff = function() {
-        var video;
+        var track, video, _i, _len, _ref;
         video = scope.channel.video;
         if (video) {
           video.pause();
           video.src = "";
         }
         if (scope.cameraStream) {
-          scope.cameraStream.getTracks()[0].stop();
+          _ref = scope.cameraStream.getTracks();
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            track = _ref[_i];
+            track.stop();
+          }
         }
       };
       scope.$on('$destroy', turnOff);
