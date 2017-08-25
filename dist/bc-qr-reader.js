@@ -3964,7 +3964,8 @@ bcQrReader = function($timeout) {
       onResult: '=',
       onError: '=',
       active: '=',
-      cameraStatus: '='
+      cameraStatus: '=',
+      cameraStream: '='
     },
     template: '<div><webcam on-stream="onStream(stream)" on-error="onError(err)" ng-if="active" channel="channel"></webcam><canvas id="qr-canvas"></canvas></div>',
     link: function(scope, elem, attrs) {
@@ -3982,15 +3983,15 @@ bcQrReader = function($timeout) {
           video.pause();
           video.src = "";
         }
-        if (scope.qrStream) {
-          scope.qrStream.getTracks()[0].stop();
+        if (scope.cameraStream) {
+          scope.cameraStream.getTracks()[0].stop();
         }
       };
       scope.$on('$destroy', turnOff);
       scope.onStream = function(stream) {
         var canvas;
         canvas = document.getElementById("qr-canvas");
-        scope.qrStream = stream;
+        scope.cameraStream = stream;
         scope.lookForQR();
         return scope.cameraStatus = true;
       };

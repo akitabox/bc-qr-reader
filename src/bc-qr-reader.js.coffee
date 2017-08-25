@@ -8,6 +8,7 @@ bcQrReader = ($timeout) ->
       onError: '='
       active: '='
       cameraStatus: '='
+      cameraStream: '='
     }
     template: '<div><webcam on-stream="onStream(stream)" on-error="onError(err)" ng-if="active" channel="channel"></webcam><canvas id="qr-canvas"></canvas></div>',
     link: (scope, elem, attrs) ->
@@ -21,8 +22,8 @@ bcQrReader = ($timeout) ->
         if video
           video.pause();
           video.src = "";
-        if scope.qrStream
-          scope.qrStream.getTracks()[0].stop();
+        if scope.cameraStream
+          scope.cameraStream.getTracks()[0].stop();
         return;
 
       scope.$on('$destroy', turnOff);
@@ -30,7 +31,7 @@ bcQrReader = ($timeout) ->
       scope.onStream = (stream) ->
         # Evil (TODO: use a directive to manipulate the DOM or try to use scope.channel):
         canvas = document.getElementById("qr-canvas")
-        scope.qrStream = stream
+        scope.cameraStream = stream
 
         scope.lookForQR()
         scope.cameraStatus = true
