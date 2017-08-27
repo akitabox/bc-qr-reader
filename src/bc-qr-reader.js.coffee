@@ -9,10 +9,11 @@ bcQrReader = ($timeout) ->
       active: '='
       cameraStatus: '='
       cameraStream: '='
+      channel: '=cameraChannel'
     }
     template: '<div><webcam on-stream="onStream(stream)" on-error="onError(err)" ng-if="active" channel="channel"></webcam><canvas id="qr-canvas"></canvas></div>',
     link: (scope, elem, attrs) ->
-      scope.channel = {}
+      scope.channel = angular.extend({}, scope.channel);
 
       if !scope.onError
         scope.onError = (error) -> console.log error

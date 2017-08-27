@@ -3965,12 +3965,13 @@ bcQrReader = function($timeout) {
       onError: '=',
       active: '=',
       cameraStatus: '=',
-      cameraStream: '='
+      cameraStream: '=',
+      channel: '=cameraChannel'
     },
     template: '<div><webcam on-stream="onStream(stream)" on-error="onError(err)" ng-if="active" channel="channel"></webcam><canvas id="qr-canvas"></canvas></div>',
     link: function(scope, elem, attrs) {
       var turnOff;
-      scope.channel = {};
+      scope.channel = angular.extend({}, scope.channel);
       if (!scope.onError) {
         scope.onError = function(error) {
           return console.log(error);
