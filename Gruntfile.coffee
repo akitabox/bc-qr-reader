@@ -1,8 +1,8 @@
 module.exports = (grunt) ->
-  
+
   grunt.initConfig
     pkg: grunt.file.readJSON("package.json")
-    
+
     clean: {
       dist: ["dist"]
       build: ["build"]
@@ -11,8 +11,8 @@ module.exports = (grunt) ->
     concat:
       options:
         separator: ";"
-      
-      bc_qr_reader:  
+
+      bc_qr_reader:
         src: [
           'src/jsqrcode/src/grid.js'
           'src/jsqrcode/src/version.js'
@@ -33,8 +33,8 @@ module.exports = (grunt) ->
           'src/jsqrcode/src/databr.js'
           'build/src/bc-qr-reader.js'
         ]
-        dest: "build/bc-qr-reader-concat.js" 
-        
+        dest: "build/bc-qr-reader-concat.js"
+
     coffee:
       coffee_to_js:
         options:
@@ -45,24 +45,24 @@ module.exports = (grunt) ->
         src: ["src/bc-qr-reader.js.coffee"]
         dest: 'build'
         ext: ".js"
-        
+
     surround:
-      wraps: 
-        options: 
+      wraps:
+        options:
           prepend: '(function() { if (/internet explorer/i.test(window.navigator.userAgent) || /MSIE/i.test(window.navigator.userAgent)) { return; }',
-          append: '})()'
+          append: '})();'
         files: [{
           src: 'build/bc-qr-reader-concat.js'
           dest: 'dist/bc-qr-reader.js'
         }]
-  
+
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadNpmTasks('grunt-surround')
-    
-  grunt.registerTask "compile", ["coffee"]  
-    
+
+  grunt.registerTask "compile", ["coffee"]
+
   grunt.registerTask "dist", [
     "clean"
     "compile"
