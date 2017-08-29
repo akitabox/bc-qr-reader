@@ -34,9 +34,9 @@ bcQrReader = ($timeout) ->
         # Evil (TODO: use a directive to manipulate the DOM or try to use scope.channel):
         canvas = document.getElementById("qr-canvas")
         scope.cameraStream = stream
+        scope.cameraStatus = true
 
         scope.lookForQR()
-        scope.cameraStatus = true
 
       scope.lookForQR = () ->
         canvas = document.getElementById("qr-canvas")
