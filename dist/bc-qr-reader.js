@@ -1,4 +1,4 @@
-(function() { if (/internet explorer/i.test(window.navigator.userAgent) || /MSIE/i.test(window.navigator.userAgent)) { return; }
+(function() { if (/internet explorer/i.test(window.navigator.userAgent) || /MSIE/i.test(window.navigator.userAgent)) {var dummy = function() {return {restrict: 'E', replace: 'true', template: '<p>Not supported for this browser</p>'};};angular.module('bcQrReader', []).directive('bcQrReader', [dummy]);return;}
 /*
   Ported to JavaScript by Lazar Laszlo 2011 
   
@@ -24,7 +24,7 @@
 */
 
 
-var GridSampler = {};
+GridSampler = {};
 
 GridSampler.checkAndNudgePoints=function( image,  points)
 		{
@@ -119,12 +119,12 @@ GridSampler.sampleGrid3=function( image,  dimension,  transform)
 				{
 					for (var x = 0; x < max; x += 2)
 					{
-						//var xpoint = (Math.floor( points[x]) * 4) + (Math.floor( points[x + 1]) * qrcode.width * 4);
+						var xpoint = (Math.floor( points[x]) * 4) + (Math.floor( points[x + 1]) * qrcode.width * 4);
                         var bit = image[Math.floor( points[x])+ qrcode.width* Math.floor( points[x + 1])];
-						//qrcode.imagedata.data[xpoint] = bit?255:0;
-						//qrcode.imagedata.data[xpoint+1] = bit?255:0;
-						//qrcode.imagedata.data[xpoint+2] = 0;
-						//qrcode.imagedata.data[xpoint+3] = 255;
+						qrcode.imagedata.data[xpoint] = bit?255:0;
+						qrcode.imagedata.data[xpoint+1] = bit?255:0;
+						qrcode.imagedata.data[xpoint+2] = 0;
+						qrcode.imagedata.data[xpoint+3] = 255;
 						//bits[x >> 1][ y]=bit;
 						if(bit)
 							bits.set_Renamed(x >> 1, y);
@@ -150,7 +150,8 @@ GridSampler.sampleGridx=function( image,  dimension,  p1ToX,  p1ToY,  p2ToX,  p2
 	var transform = PerspectiveTransform.quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
 			
 	return GridSampler.sampleGrid3(image, dimension, transform);
-};/*
+}
+;/*
   Ported to JavaScript by Lazar Laszlo 2011 
   
   lazarsoft@gmail.com, www.lazarsoft.info
@@ -502,21 +503,21 @@ PerspectiveTransform.quadrilateralToQuadrilateral=function( x0,  y0,  x1,  y1,  
 
 PerspectiveTransform.squareToQuadrilateral=function( x0,  y0,  x1,  y1,  x2,  y2,  x3,  y3)
 {
-	var dy2 = y3 - y2;
-	var dy3 = y0 - y1 + y2 - y3;
+	 dy2 = y3 - y2;
+	 dy3 = y0 - y1 + y2 - y3;
 	if (dy2 == 0.0 && dy3 == 0.0)
 	{
 		return new PerspectiveTransform(x1 - x0, x2 - x1, x0, y1 - y0, y2 - y1, y0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
-		var dx1 = x1 - x2;
-		var dx2 = x3 - x2;
-		var dx3 = x0 - x1 + x2 - x3;
-		var dy1 = y1 - y2;
-		var denominator = dx1 * dy2 - dx2 * dy1;
-		var a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
-		var a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
+		 dx1 = x1 - x2;
+		 dx2 = x3 - x2;
+		 dx3 = x0 - x1 + x2 - x3;
+		 dy1 = y1 - y2;
+		 denominator = dx1 * dy2 - dx2 * dy1;
+		 a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
+		 a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
 		return new PerspectiveTransform(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0, y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0, a13, a23, 1.0);
 	}
 }
@@ -670,8 +671,8 @@ function Detector(image)
 
 	this.distance=function( pattern1,  pattern2)
 	{
-		var xDiff = pattern1.X - pattern2.X;
-		var yDiff = pattern1.Y - pattern2.Y;
+		xDiff = pattern1.X - pattern2.X;
+		yDiff = pattern1.Y - pattern2.Y;
 		return  Math.sqrt( (xDiff * xDiff + yDiff * yDiff));
 	}
 	this.computeDimension=function( topLeft,  topRight,  bottomLeft,  moduleSize)
@@ -867,7 +868,7 @@ function FormatInformation(formatInfo)
 	});
 	this.GetHashCode=function()
 	{
-		return (this.errorCorrectionLevel.ordinal() << 3) |  this.dataMask;
+		return (this.errorCorrectionLevel.ordinal() << 3) |  dataMask;
 	}
 	this.Equals=function( o)
 	{
@@ -982,7 +983,8 @@ var L = new ErrorCorrectionLevel(0, 0x01, "L");
 var M = new ErrorCorrectionLevel(1, 0x00, "M");
 var Q = new ErrorCorrectionLevel(2, 0x03, "Q");
 var H = new ErrorCorrectionLevel(3, 0x02, "H");
-var FOR_BITS = new Array( M, L, H, Q);;/*
+var FOR_BITS = new Array( M, L, H, Q);
+;/*
   Ported to JavaScript by Lazar Laszlo 2011 
   
   lazarsoft@gmail.com, www.lazarsoft.info
@@ -1436,7 +1438,7 @@ function BitMatrixParser(bitMatrix)
 */
 
 
-var DataMask = {};
+DataMask = {};
 
 DataMask.forReference = function(reference)
 {
@@ -1656,9 +1658,9 @@ function ReedSolomonDecoder(field)
 			for (var i = 0; i < twoS; i++)
 			{
 				// Thanks to sanfordsquires for this fix:
-				var evalu = poly.evaluateAt(this.field.exp(dataMatrix?i + 1:i));
-				syndromeCoefficients[syndromeCoefficients.length - 1 - i] = evalu;
-				if (evalu != 0)
+				var eval = poly.evaluateAt(this.field.exp(dataMatrix?i + 1:i));
+				syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
+				if (eval != 0)
 				{
 					noError = false;
 				}
@@ -2089,7 +2091,7 @@ function GF256( primitive)
 			}
 			if (coefficient == 0)
 			{
-				return this.zero;
+				return zero;
 			}
 			var coefficients = new Array(degree + 1);
 			for(var i=0;i<coefficients.length;i++)coefficients[i]=0;
@@ -2165,7 +2167,7 @@ GF256.addOrSubtract=function( a,  b)
 */
 
 
-var Decoder={};
+Decoder={};
 Decoder.rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
 
 Decoder.correctErrors=function( codewordBytes,  numDataCodewords)
@@ -2252,7 +2254,7 @@ Decoder.decode=function(bits)
 */
 
 
-var qrcode = {};
+qrcode = {};
 qrcode.imagedata = null;
 qrcode.width = 0;
 qrcode.height = 0;
@@ -2264,129 +2266,12 @@ qrcode.sizeOfDataLengthInfo =  [  [ 10, 9, 8, 8 ],  [ 12, 11, 16, 10 ],  [ 14, 1
 
 qrcode.callback = null;
 
-qrcode.vidSuccess = function (stream) 
-{
-    qrcode.localstream = stream;
-    if(qrcode.webkit)
-        qrcode.video.src = window.webkitURL.createObjectURL(stream);
-    else
-    if(qrcode.moz)
-    {
-        qrcode.video.mozSrcObject = stream;
-        qrcode.video.play();
-    }
-    else
-        qrcode.video.src = stream;
-    
-    qrcode.gUM=true;
-    
-    qrcode.canvas_qr2 = document.createElement('canvas');
-    qrcode.canvas_qr2.id = "qr-canvas";
-    qrcode.qrcontext2 = qrcode.canvas_qr2.getContext('2d');
-    qrcode.canvas_qr2.width = qrcode.video.videoWidth;
-    qrcode.canvas_qr2.height = qrcode.video.videoHeight;
-    setTimeout(qrcode.captureToCanvas, 500);
-}
-        
-qrcode.vidError = function(error)
-{
-    qrcode.gUM=false;
-    return;
-}
-
-qrcode.captureToCanvas = function()
-{
-    if(qrcode.gUM)
-    {
-        try{
-            if(qrcode.video.videoWidth == 0)
-            {
-                setTimeout(qrcode.captureToCanvas, 500);
-                return;
-            }
-            else
-            {
-                qrcode.canvas_qr2.width = qrcode.video.videoWidth;
-                qrcode.canvas_qr2.height = qrcode.video.videoHeight;
-            }
-            qrcode.qrcontext2.drawImage(qrcode.video,0,0);
-            try{
-                qrcode.decode();
-            }
-            catch(e){       
-                console.log(e);
-                setTimeout(qrcode.captureToCanvas, 500);
-            };
-        }
-        catch(e){       
-                console.log(e);
-                setTimeout(qrcode.captureToCanvas, 500);
-        };
-    }
-}
-
-qrcode.setWebcam = function(videoId)
-{
-    var n=navigator;
-    qrcode.video=document.getElementById(videoId);
-
-    var options = true;
-    if(navigator.mediaDevices && navigator.mediaDevices.enumerateDevices)
-    {
-        try{
-            navigator.mediaDevices.enumerateDevices()
-            .then(function(devices) {
-              devices.forEach(function(device) {
-                console.log("deb1");
-                if (device.kind === 'videoinput') {
-                  if(device.label.toLowerCase().search("back") >-1)
-                    options=[{'sourceId': device.deviceId}] ;
-                }
-                console.log(device.kind + ": " + device.label +
-                            " id = " + device.deviceId);
-              });
-            })
-            
-        }
-        catch(e)
-        {
-            console.log(e);
-        }
-    }
-    else{
-        console.log("no navigator.mediaDevices.enumerateDevices" );
-    }
-    
-    if(n.getUserMedia)
-        n.getUserMedia({video: options, audio: false}, qrcode.vidSuccess, qrcode.vidError);
-    else
-    if(n.webkitGetUserMedia)
-    {
-        qrcode.webkit=true;
-        n.webkitGetUserMedia({video:options, audio: false}, qrcode.vidSuccess, qrcode.vidError);
-    }
-    else
-    if(n.mozGetUserMedia)
-    {
-        qrcode.moz=true;
-        n.mozGetUserMedia({video: options, audio: false}, qrcode.vidSuccess, qrcode.vidError);
-    }
-}
-
 qrcode.decode = function(src){
     
     if(arguments.length==0)
     {
-        if(qrcode.canvas_qr2)
-        {
-            var canvas_qr = qrcode.canvas_qr2;
-            var context = qrcode.qrcontext2;
-        }	
-        else
-        {
-            var canvas_qr = document.getElementById("qr-canvas");
-            var context = canvas_qr.getContext('2d');
-        }
+        var canvas_qr = document.getElementById("qr-canvas");
+        var context = canvas_qr.getContext('2d');
         qrcode.width = canvas_qr.width;
         qrcode.height = canvas_qr.height;
         qrcode.imagedata = context.getImageData(0, 0, qrcode.width, qrcode.height);
@@ -2398,17 +2283,8 @@ qrcode.decode = function(src){
     else
     {
         var image = new Image();
-        image.crossOrigin = "Anonymous";
         image.onload=function(){
             //var canvas_qr = document.getElementById("qr-canvas");
-            var canvas_out = document.getElementById("out-canvas");
-            if(canvas_out!=null)
-            {
-                var outctx = canvas_out.getContext('2d');
-                outctx.clearRect(0, 0, 320, 240);
-                outctx.drawImage(image, 0, 0, 320, 240);
-            }
-
             var canvas_qr = document.createElement('canvas');
             var context = canvas_qr.getContext('2d');
             var nheight = image.height;
@@ -2446,11 +2322,6 @@ qrcode.decode = function(src){
             }
             if(qrcode.callback!=null)
                 qrcode.callback(qrcode.result);
-        }
-        image.onerror = function ()
-        {
-            if(qrcode.callback!=null) 
-                qrcode.callback("Failed to load the image");
         }
         image.src = src;
     }
@@ -2521,21 +2392,18 @@ qrcode.process = function(ctx){
 
     var qRCodeMatrix = detector.detect();
     
-    if(qrcode.debug)
+    /*for (var y = 0; y < qRCodeMatrix.bits.Height; y++)
     {
-        for (var y = 0; y < qRCodeMatrix.bits.Height; y++)
+        for (var x = 0; x < qRCodeMatrix.bits.Width; x++)
         {
-            for (var x = 0; x < qRCodeMatrix.bits.Width; x++)
-            {
-                var point = (x * 4*2) + (y*2 * qrcode.width * 4);
-                qrcode.imagedata.data[point] = qRCodeMatrix.bits.get_Renamed(x,y)?0:0;
-                qrcode.imagedata.data[point+1] = qRCodeMatrix.bits.get_Renamed(x,y)?0:0;
-                qrcode.imagedata.data[point+2] = qRCodeMatrix.bits.get_Renamed(x,y)?255:0;
-            }
+            var point = (x * 4*2) + (y*2 * qrcode.width * 4);
+            qrcode.imagedata.data[point] = qRCodeMatrix.bits.get_Renamed(x,y)?0:0;
+            qrcode.imagedata.data[point+1] = qRCodeMatrix.bits.get_Renamed(x,y)?0:0;
+            qrcode.imagedata.data[point+2] = qRCodeMatrix.bits.get_Renamed(x,y)?255:0;
         }
+    }*/
+    if(qrcode.debug)
         ctx.putImageData(qrcode.imagedata, 0, 0);
-    }
-    
     
     var reader = Decoder.decode(qRCodeMatrix.bits);
     var data = reader.DataByte;
@@ -2561,8 +2429,8 @@ qrcode.getPixel = function(x,y){
     if (qrcode.height < y) {
         throw "point error";
     }
-    var point = (x * 4) + (y * qrcode.width * 4);
-    var p = (qrcode.imagedata.data[point]*33 + qrcode.imagedata.data[point + 1]*34 + qrcode.imagedata.data[point + 2]*33)/100;
+    point = (x * 4) + (y * qrcode.width * 4);
+    p = (qrcode.imagedata.data[point]*33 + qrcode.imagedata.data[point + 1]*34 + qrcode.imagedata.data[point + 2]*33)/100;
     return p;
 }
 
@@ -2639,11 +2507,7 @@ qrcode.grayScaleToBitmap=function(grayScale)
     var sqrtNumArea = middle.length;
     var areaWidth = Math.floor(qrcode.width / sqrtNumArea);
     var areaHeight = Math.floor(qrcode.height / sqrtNumArea);
-
-    var buff = new ArrayBuffer(qrcode.width*qrcode.height);
-    var bitmap = new Uint8Array(buff);
-
-    //var bitmap = new Array(qrcode.height*qrcode.width);
+    var bitmap = new Array(qrcode.height*qrcode.width);
     
     for (var ay = 0; ay < sqrtNumArea; ay++)
     {
@@ -2661,12 +2525,8 @@ qrcode.grayScaleToBitmap=function(grayScale)
     return bitmap;
 }
 
-qrcode.grayscale = function()
-{
-    var buff = new ArrayBuffer(qrcode.width*qrcode.height);
-    var ret = new Uint8Array(buff);
-    //var ret = new Array(qrcode.width*qrcode.height);
-    
+qrcode.grayscale = function(){
+    var ret = new Array(qrcode.width*qrcode.height);
     for (var y = 0; y < qrcode.height; y++)
     {
         for (var x = 0; x < qrcode.width; x++)
@@ -2688,9 +2548,7 @@ function URShift( number,  bits)
         return number >> bits;
     else
         return (number >> bits) + (2 << ~bits);
-}
-
-;/*
+};/*
   Ported to JavaScript by Lazar Laszlo 2011 
   
   lazarsoft@gmail.com, www.lazarsoft.info
@@ -2725,8 +2583,8 @@ qrcode.orderBestPatterns=function(patterns)
 			
 			function distance( pattern1,  pattern2)
 			{
-				var xDiff = pattern1.X - pattern2.X;
-				var yDiff = pattern1.Y - pattern2.Y;
+				xDiff = pattern1.X - pattern2.X;
+				yDiff = pattern1.Y - pattern2.Y;
 				return  Math.sqrt( (xDiff * xDiff + yDiff * yDiff));
 			}
 			
@@ -3083,7 +2941,7 @@ function FinderPatternFinder()
 			if (startSize < 3)
 			{
 				// Couldn't find enough finder patterns
-				throw "Couldn't find enough finder patterns (found " + startSize + ")"
+				throw "Couldn't find enough finder patterns";
 			}
 			
 			// Filter outlier possibilities whose module size is too different
@@ -3114,16 +2972,16 @@ function FinderPatternFinder()
 
 				var stdDev = Math.sqrt(square / startSize - average * average);
 				var limit = Math.max(0.2 * average, stdDev);
-				//for (var i = 0; i < this.possibleCenters.length && this.possibleCenters.length > 3; i++)
-				for (var i = this.possibleCenters.length - 1; i >= 0 ; i--)
+				for (var i = 0; i < this.possibleCenters.length && this.possibleCenters.length > 3; i++)
 				{
 					var pattern =  this.possibleCenters[i];
 					//if (Math.abs(pattern.EstimatedModuleSize - average) > 0.2 * average)
                     if (Math.abs(pattern.EstimatedModuleSize - average) > limit)
 					{
-						//this.possibleCenters.remove(i);
-						this.possibleCenters.splice(i,1);
-						//i--;
+            var rest = this.slice((this.possibleCenters) + 1 || this.length);
+            this.length = this.possibleCenters < 0 ? this.length + this.possibleCenters : this.possibleCenters;
+            this.push.apply(this, rest);
+						i--;
 					}
 				}
 			}
@@ -3329,7 +3187,7 @@ function FinderPatternFinder()
 					if (this.hasSkipped)
 					{
 						// Found a third one
-						done = this.haveMultiplyConfirmedCenters();
+						done = haveMultiplyConfirmedCenters();
 					}
 				}
 			}
@@ -3340,7 +3198,8 @@ function FinderPatternFinder()
 		
 		return new FinderPatternInfo(patternInfo);
 	};
-};/*
+}
+;/*
   Ported to JavaScript by Lazar Laszlo 2011 
   
   lazarsoft@gmail.com, www.lazarsoft.info
@@ -3834,7 +3693,7 @@ function QRCodeDataBlockReader(blocks,  version,  numErrorCorrectionCode)
 			var unicodeString = "";
 			do 
 			{
-				intData = this.getNextBits(13);
+				intData = getNextBits(13);
 				var lowerByte = intData % 0xC0;
 				var higherByte = intData / 0xC0;
 				
@@ -3864,33 +3723,12 @@ function QRCodeDataBlockReader(blocks,  version,  numErrorCorrectionCode)
 			return unicodeString;
 		}
 
-	this.parseECIValue = function ()
-	{
-		var intData = 0;
-		var firstByte = this.getNextBits(8);
-		if ((firstByte & 0x80) == 0) {
-			intData = firstByte & 0x7F;
-		}
-		if ((firstByte & 0xC0) == 0x80) {
-			// two bytes
-			var secondByte = this.getNextBits(8);
-			intData = ((firstByte & 0x3F) << 8) | secondByte;
-		}
-		if ((firstByte & 0xE0) == 0xC0) {
-			// three bytes
-			var secondThirdBytes = this.getNextBits(8);;
-			intData = ((firstByte & 0x1F) << 16) | secondThirdBytes;
-		}
-		return intData;
-	}
-
 	this.__defineGetter__("DataByte", function()
 	{
 		var output = new Array();
 		var MODE_NUMBER = 1;
 	    var MODE_ROMAN_AND_NUMBER = 2;
 	    var MODE_8BIT_BYTE = 4;
-		var MODE_ECI = 7;
 	    var MODE_KANJI = 8;
 		do 
 					{
@@ -3903,52 +3741,62 @@ function QRCodeDataBlockReader(blocks,  version,  numErrorCorrectionCode)
 							else
 								throw "Empty data block";
 						}
-						if (mode != MODE_NUMBER && mode != MODE_ROMAN_AND_NUMBER && mode != MODE_8BIT_BYTE && mode != MODE_KANJI && mode != MODE_ECI)
+						//if (mode != 1 && mode != 2 && mode != 4 && mode != 8)
+						//	break;
+						//}
+						if (mode != MODE_NUMBER && mode != MODE_ROMAN_AND_NUMBER && mode != MODE_8BIT_BYTE && mode != MODE_KANJI)
 						{
+							/*					canvas.println("Invalid mode: " + mode);
+							mode = guessMode(mode);
+							canvas.println("Guessed mode: " + mode); */
 							throw "Invalid mode: " + mode + " in (block:" + this.blockPointer + " bit:" + this.bitPointer + ")";
 						}
-
-						if(mode == MODE_ECI)
+						dataLength = this.getDataLength(mode);
+						if (dataLength < 1)
+							throw "Invalid data length: " + dataLength;
+						//canvas.println("length: " + dataLength);
+						switch (mode)
 						{
-							var temp_sbyteArray3 = this.parseECIValue();
-							//output.push(temp_sbyteArray3);
-						}
-						else
-						{
-
-							var dataLength = this.getDataLength(mode);
-							if (dataLength < 1)
-								throw "Invalid data length: " + dataLength;
-							switch (mode)
-							{
-								
-								case MODE_NUMBER: 
-									var temp_str = this.getFigureString(dataLength);
-									var ta = new Array(temp_str.length);
-									for(var j=0;j<temp_str.length;j++)
-										ta[j]=temp_str.charCodeAt(j);
-									output.push(ta);
-									break;
-								
-								case MODE_ROMAN_AND_NUMBER: 
-									var temp_str = this.getRomanAndFigureString(dataLength);
-									var ta = new Array(temp_str.length);
-									for(var j=0;j<temp_str.length;j++)
-										ta[j]=temp_str.charCodeAt(j);
-									output.push(ta );
-									break;
-								
-								case MODE_8BIT_BYTE: 
-									var temp_sbyteArray3 = this.get8bitByteArray(dataLength);
-									output.push(temp_sbyteArray3);
-									break;
-								
-								case MODE_KANJI: 
-									var temp_str = this.getKanjiString(dataLength);
-									output.push(temp_str);
-									break;
+							
+							case MODE_NUMBER: 
+								//canvas.println("Mode: Figure");
+								var temp_str = this.getFigureString(dataLength);
+								var ta = new Array(temp_str.length);
+								for(var j=0;j<temp_str.length;j++)
+									ta[j]=temp_str.charCodeAt(j);
+								output.push(ta);
+								break;
+							
+							case MODE_ROMAN_AND_NUMBER: 
+								//canvas.println("Mode: Roman&Figure");
+								var temp_str = this.getRomanAndFigureString(dataLength);
+								var ta = new Array(temp_str.length);
+								for(var j=0;j<temp_str.length;j++)
+									ta[j]=temp_str.charCodeAt(j);
+								output.push(ta );
+								//output.Write(SystemUtils.ToByteArray(temp_sbyteArray2), 0, temp_sbyteArray2.Length);
+								break;
+							
+							case MODE_8BIT_BYTE: 
+								//canvas.println("Mode: 8bit Byte");
+								//sbyte[] temp_sbyteArray3;
+								var temp_sbyteArray3 = this.get8bitByteArray(dataLength);
+								output.push(temp_sbyteArray3);
+								//output.Write(SystemUtils.ToByteArray(temp_sbyteArray3), 0, temp_sbyteArray3.Length);
+								break;
+							
+							case MODE_KANJI: 
+								//canvas.println("Mode: Kanji");
+								//sbyte[] temp_sbyteArray4;
+								//temp_sbyteArray4 = SystemUtils.ToSByteArray(SystemUtils.ToByteArray(getKanjiString(dataLength)));
+								//output.Write(SystemUtils.ToByteArray(temp_sbyteArray4), 0, temp_sbyteArray4.Length);
+                                var temp_str = this.getKanjiString(dataLength);
+								output.push(temp_str);
+								break;
 							}
-						}
+						//			
+						//canvas.println("DataLength: " + dataLength);
+						//Console.out.println(dataString);
 					}
 					while (true);
 		return output;
